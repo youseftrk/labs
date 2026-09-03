@@ -1,0 +1,42 @@
+<!-- Typer — a stacked block of lines that reveal character by character, each glyph
+     rippling through randomized pill/highlight/border states before it settles.
+     Load typer.css, put one [data-typer] element per line, then drive them with a
+     TyperGroup (from typer.ts) for the top-to-bottom cascade.
+
+     Colors are three custom properties (set them on any ancestor):
+       --typer-fg  ink/pill · --typer-bg  page/knockout · --typer-accent  highlight -->
+
+<link rel="stylesheet" href="typer.css" />
+
+<div class="typer-block" style="display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-weight:600;font-size:clamp(1.4rem,4vw,2.4rem)">
+  <span data-typer data-typer-type="initial">design engineered by me :)</span>
+</div>
+
+<!-- Chrome blocks file:// ES modules. typer.js is a classic script (window.TyperGroup).
+     IntersectionObserver on file:// often never fires — start if already on screen. -->
+<script src="typer.js"></script>
+<script>
+  const lines = [...document.querySelectorAll("[data-typer]")];
+  const group = new TyperGroup(lines, { fps: 20, cycles: 3 }, 0.15);
+
+  function play() {
+    group.in();
+  }
+
+  const block = document.querySelector(".typer-block");
+  const rect = block.getBoundingClientRect();
+  const onScreen = rect.top < window.innerHeight && rect.bottom > 0;
+  if (onScreen) {
+    play();
+  } else if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        play();
+        io.disconnect();
+      }
+    }, { threshold: 0 });
+    io.observe(block);
+  } else {
+    play();
+  }
+</script>

@@ -1,0 +1,44 @@
+.cooler-scrollbar {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 40;
+  pointer-events: none;
+  color: var(--scroll-dot);
+}
+
+.cooler-scrollbar line {
+  stroke: currentColor;
+  stroke-width: var(--stroke-width, 3);
+  stroke-linecap: round;
+  transition: stroke 250ms ease;
+}
+
+.cooler-scrollbar .hit-area,
+.cooler-scrollbar .arrow-hit {
+  fill: none;
+  pointer-events: none;
+}
+
+.cooler-scrollbar[data-state="idle"] .arrow-hit {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.cooler-scrollbar[data-state="tracking"] .hit-area {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+@media (hover: none), (max-width: 767px) {
+  .cooler-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cooler-scrollbar line {
+    transition: none;
+  }
+}
